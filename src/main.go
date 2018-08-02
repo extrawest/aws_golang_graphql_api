@@ -4,35 +4,36 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/ec2manager/src/config"
-	"github.com/ec2manager/src/manager"
+	"github.com/aws_golang_graphql_api/src/config"
+	"github.com/aws_golang_graphql_api/src/manager"
+	"github.com/aws_golang_graphql_api/src/router"
+	"github.com/facebookgo/inject"
 	"log"
 )
 
 func main() {
-	client, err := createEc2Client()
+	server := router.NewServer()
+	err := inject.Populate(
+		NewEc2Client(),
+		manager.NewEc2Manager(),
+		server,
+	)
 	if err != nil {
-		log.Fatalf("Can't create ec2 client")
+		log.Fatalf("Can't inject values %s", err.Error())
 	}
 
-	ec2manager := manager.NewEc2Manager(client)
-	err = ec2manager.StartInstance(config.GetConfig().InstanceID)
-	if err != nil {
-		log.Fatalf("Can't start instance with ID %s. Error %s", config.GetConfig().InstanceID, err.Error())
-	} else {
-		log.Printf("Instance with ID %s successfully started", config.GetConfig().InstanceID)
-	}
+	server.Start()
 }
 
-func createEc2Client() (*ec2.EC2, error) {
+func NewEc2Client() *ec2.EC2 {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		return nil, err
+		log.Fatalf("Can't load AWS config %s", err.Error())
 	}
 
 	cfg.Region = config.GetConfig().Region
 	cfg.Credentials = aws.StaticCredentialsProvider{Value: aws.Credentials{
 		AccessKeyID: config.GetConfig().AccessKeyID, SecretAccessKey: config.GetConfig().SecretAccessKey}}
 
-	return ec2.New(cfg), nil
+	return ec2.New(cfg)
 }

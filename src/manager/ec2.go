@@ -2,37 +2,36 @@ package manager
 
 import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws_golang_graphql_api/src/models"
 	"log"
 )
 
 type ec2Manager struct {
-	client *ec2.EC2
+	Client *ec2.EC2 `inject:""`
 }
 
-func NewEc2Manager(client *ec2.EC2) *ec2Manager {
-	ec2 := new(ec2Manager)
-	ec2.client = client
-	return ec2
+func NewEc2Manager() models.Ec2Manager {
+	return new(ec2Manager)
 }
 
-func (m *ec2Manager) DescribeInstances(ids ...string) error {
+func (m *ec2Manager) DescribeInstances(ids ...string) (*ec2.DescribeInstancesOutput, error) {
 	input := new(ec2.DescribeInstancesInput)
 	input.InstanceIds = ids
 
-	req := m.client.DescribeInstancesRequest(input)
+	req := m.Client.DescribeInstancesRequest(input)
 	resp, err := req.Send()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Printf("Describe Instances Response %+v", resp)
-	return nil
+	return resp, nil
 }
 
 func (m *ec2Manager) StartInstance(ids ...string) error {
 	input := new(ec2.StartInstancesInput)
 	input.InstanceIds = ids
 
-	req := m.client.StartInstancesRequest(input)
+	req := m.Client.StartInstancesRequest(input)
 	resp, err := req.Send()
 	if err != nil {
 		return err
@@ -46,7 +45,7 @@ func (m *ec2Manager) StopInstance(ids ...string) error {
 	input := new(ec2.StopInstancesInput)
 	input.InstanceIds = ids
 
-	req := m.client.StopInstancesRequest(input)
+	req := m.Client.StopInstancesRequest(input)
 	resp, err := req.Send()
 	if err != nil {
 		return nil

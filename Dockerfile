@@ -3,7 +3,7 @@ FROM golang:1.10 as builder
 # install dep
 RUN go get github.com/golang/dep/cmd/dep
 # create a working directory
-WORKDIR /go/src/github.com/ec2manager
+WORKDIR /go/src/github.com/aws_golang_graphql_api
 # add Gopkg.toml and Gopkg.lock
 ADD Gopkg.toml Gopkg.toml
 ADD Gopkg.lock Gopkg.lock
@@ -24,6 +24,6 @@ RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 # set working directory
 WORKDIR /root
 # copy the binary from builder
-COPY --from=builder /go/src/github.com/ec2manager/app .
+COPY --from=builder /go/src/github.com/aws_golang_graphql_api/app .
 # run the binary
 CMD ["./app"]

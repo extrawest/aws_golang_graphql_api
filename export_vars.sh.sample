@@ -1,6 +1,0 @@
-#!/bin/bash
-
-export INSTANCE_ID=""
-export REGION=""
-export ACCESS_KEY_ID=""
-export SECRET_ACCESS_KEY=""

@@ -8,7 +8,6 @@ import (
 var config AppConfig
 
 type AppConfig struct {
-	InstanceID      string `envconfig:"INSTANCE_ID"`
 	Region          string `envconfig:"REGION"`
 	AccessKeyID     string `envconfig:"ACCESS_KEY_ID"`
 	SecretAccessKey string `envconfig:"SECRET_ACCESS_KEY"`
