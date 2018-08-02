@@ -1,0 +1,11 @@
+version: '2.1'
+services:
+  app:
+    build: .
+    ports:
+    - "9999:8080"
+    environment:
+      - INSTANCE_ID
+      - REGION
+      - ACCESS_KEY_ID
+      - SECRET_ACCESS_KEY

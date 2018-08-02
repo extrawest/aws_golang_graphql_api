@@ -1,1 +1,2 @@
-# aws_golang_graphql_api
+# ec2manager
+GraphQL server on Golang to manage AWS EC2 instances.
