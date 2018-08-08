@@ -14,6 +14,7 @@ const (
 	startURL    = "/start"
 	stopURL     = "/stop"
 	describeURL = "/describe"
+	graphqlURL  = "/graphql"
 )
 
 func NewServer() *server {
@@ -25,5 +26,6 @@ func (s *server) Start() {
 	r.GET(startURL, s.startInstanceHandler)
 	r.GET(stopURL, s.stopInstanceHandler)
 	r.GET(describeURL, s.describeInstancesHandler)
+	r.GET(graphqlURL, s.graphQLHandler)
 	log.Fatal(r.Run())
 }

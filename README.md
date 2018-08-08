@@ -1,4 +1,4 @@
-# aws_golang_graphql_api
+# ec2manager
 GraphQL server on Golang to manage AWS EC2 instances.
 
 ## Setup
@@ -6,9 +6,9 @@ GraphQL server on Golang to manage AWS EC2 instances.
 ### Dependencies
 
 ```bash
-# install go dependency management tool 
+# install go dependency management tool
 go get -u github.com/golang/dep/cmd/dep
-  
+
 # download and install docker-compose
 https://docs.docker.com/compose/install
 
@@ -22,7 +22,10 @@ create ".env" file with the necessary environment variables (see example .env.sa
 ```bash
 docker-compose up
 ```
-### Examples 
+### Examples
+for testing on localhost: port 9999 (*localhost:9999/*** *)
+
+#### REST
 */start?id="ID"* - start instance with ID
 
 */stop?id="ID"* - stop instance with ID
@@ -30,3 +33,16 @@ docker-compose up
 */describe?id="ID"* - get info of instance with ID
 
 for testing on localhost: port 9999 (*localhost:9999/start?id=1111111111*)
+
+#### GraphQL
+for these queries we can pass the fields that interest us in {}:
+
+**'id'** for **start,stop** and **describe** operations
+
+ **'type','launchtime','state'** only for **describe** operation
+
+*/graphql?query={instance(id:"ID",operation:"start"){id}}*
+
+*/graphql?query={instance(id:"ID",operation:"stop"){id}}*
+
+*/graphql?query={instance(id:"ID",operation:"describe"){id,type,launchtime,state}}*
